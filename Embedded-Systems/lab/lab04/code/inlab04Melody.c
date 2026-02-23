@@ -40,6 +40,11 @@ void main(void) {
     char cmd;
 
     SYSTEM_Initialize();
+    // Below line should fix random freezing--A bug with Melody randomly
+    // enables Interrupt on Change even if you don't want it. The IoC
+    // triggers so fast that it essentially prevents main() from running.
+    // That's my theory, at least -NP
+    INTCONbits.RBIE = 0;
 
     // Not necessary, but this delay allows the baud rate generator to 
     // stablize before printing the splash screen on reset. If you are going to
@@ -196,3 +201,4 @@ void myTMR1ISR(void) {
 
     TEST_PIN_SetLow();
 }
+
