@@ -192,15 +192,31 @@ the  PL_KEY 2, 3 and 4.
 		<li>A press/release of PL_KEY4 decreases triggerTime by 10</li>
 		<li>A press/release of PL_KEY4 while holding PL_KEY2 increases triggerTime by 10</li>
 </ul>
-Each press/release should increment by 10 once.  To accomplish this, you should:
+Each press/release should increment by 10 once.  To accomplish this, you should create
+			a process to detect button presses as follows:
 <ol>
+	<li>On resetn, initialize all the button vectors to the nominal button value.
 	<li>Look at the schematic to determine if the buttons are active low or active high</li>
 	<li>Write a process which holds the current and previous state of the three buttons.  </li>
 	<li>XOR these two vectors (yes you can bitwise XOR vectors) to determine if a button 
-		changed state.  If a button has changed state, look at the PL_KEY value to see if 
+		changed state.</li>
+</ol>
+
+At this point you should have three button vectors, prevButton, currButton and activeButton.
+You can then create a second process which 
+
+<ol>
+	<li>On resetn, initialize the triggerVolt and triggerTime to values somewhere around
+		the middle of the screen.
+	<li>If a button has changed state, look at the PL_KEY value to see if 
 		you have a press or release.</li>
-	<li>If PL_KEY3 or 4 has been released, look at PL_KEY2 to determine if you should
-		increment or decrement the triggerValue.</li>
+	<li>If you have a button release on PLKEY3, look at PL_KEY2 to determine if you
+	should increment or decrement triggerVolt.  You do not have to bother checking 
+		if the value is on screen.</li>
+	<li>If you have a button release on PLKEY4, look at PL_KEY2 to determine if you
+	should increment or decrement triggerTime.  You do not have to worry checking
+		if the value is on screen.
+	value on screen.</li>
 </ol>
 
 			
