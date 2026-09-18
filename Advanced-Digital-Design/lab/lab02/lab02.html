@@ -182,8 +182,28 @@ main web page.
 <h3>The hdmi_tx_0 module</h3>
 You will need to generate an IP core for this module using the instructions 
 in the "howTo 05 Instantiate Clock and HDMI IP" document posted on the 
-main web page.
+main web page.  <u>Note the reset to this module is the negation of resetn!</u>
 
+<h3>process(sysClk)</h3>
+You need a way to increase or decrease Trigger Voltage and Trigger Time.  You will accomplish this using
+the  PL_KEY 2, 3 and 4.  
+<ul>	<li>A press/release of PL_KEY3 decreases triggerVolt by 10</li>
+		<li>A press/release of PL_KEY3 while holding PL_KEY2 increases triggerVolt by 10</li>
+		<li>A press/release of PL_KEY4 decreases triggerTime by 10</li>
+		<li>A press/release of PL_KEY4 while holding PL_KEY2 increases triggerTime by 10</li>
+</ul>
+Each press/release should increment by 10 once.  To accomplish this, you should:
+<ol>
+	<li>Look at the schematic to determine if the buttons are active low or active high</li>
+	<li>Write a process which holds the current and previous state of the three buttons.  </li>
+	<li>XOR these two vectors (yes you can bitwise XOR vectors) to determine if a button 
+		changed state.  If a button has changed state, look at the PL_KEY value to see if 
+		you have a press or release.</li>
+	<li>If PL_KEY3 or 4 has been released, look at PL_KEY2 to determine if you should
+		increment or decrement the triggerValue.</li>
+</ol>
+
+			
 <h3>The scopeToHdmi package</h3>
 You will need to complete the scopeToHdmi package linked above.  Include this
 package in this lab's files and in later labs that use these components.
@@ -211,15 +231,9 @@ as triangles in cyan (R,G,B) = (0x00, 0xFF, 0xFF).
 
 <li>The ALINX board has four buttons that you are able to associate with
 your design.  One of these buttons (PL Key 1) is dedicated to the resetn
-function.  Use the remaining three keys to manipulate the Trigger Volt Mark
-and the Trigger Time Mark as follows:
+function.  Use the remaining three keys to manipulate triggerVolt and 
+	triggerTime as described above.
 
-<ul>
-<li>Pressing PL_KEY3 decreases the Trigger Volt Mark
-<li>Pressing PL_KEY3 while holding PL_KEY2 increases the Trigger Volt Mark
-<li>Pressing PL_KEY4 increases the Trigger Time Mark
-<li>Pressing PL_KEY4 while holding PL_KEY2 decreases the Trigger Time Mark
-</ul>
 
 <li>Test the channel functions by:
 <ul>
