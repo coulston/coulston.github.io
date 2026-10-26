@@ -149,8 +149,8 @@ begin
     y_SIGNED32 &lt;= SHIFT_RIGHT(x_SIGNED32, 16);
 	z_SIGNED32 &lt;= y_SIGNED32 + TO_SIGNED(400, 32);
 	
-    pixel_SIGNED16 &lt;= y_SIGNED32(15 downto 0);
-	pixel_SLV &lt;= std_logic_vector(pixel_SIGNED16);
+    pixel_SIGNED16 &lt;= z_SIGNED32(15 downto 0);
+    pixel_SLV &lt;= std_logic_vector(pixel_SIGNED16);
 
 end structure;
 </pre>
