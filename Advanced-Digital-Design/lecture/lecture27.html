@@ -137,18 +137,20 @@ use IEEE.NUMERIC_STD.ALL;
 
 architecture structure of datapath is
 
-    a_SLV: STD_LOGIC_VECTOR(15 downto 0);
-    a_SIGNED16, b_SIGNED16, c_SIGNED16: SIGNED(15 downto 0);
-    x_SIGNED32, y_SIGNED32 : SIGNED(31 downto 0);
+    a_SLV, pixel_SLV: STD_LOGIC_VECTOR(15 downto 0);
+    a_SIGNED16, b_SIGNED16, pixel_SIGNED16: SIGNED(15 downto 0);
+    x_SIGNED32, y_SIGNED32, z_SIGNED32: SIGNED(31 downto 0);
 
 begin
 
-    a_SIGNED16 &lt;= (SIGNED) a_ALV;
-    b_SIGNED16 &lt;= TO_SIGNED(-100, 16);
+    a_SIGNED16 &lt;= (SIGNED) a_SLV;
+    b_SIGNED16 &lt;= TO_SIGNED(-600, 16);
     x_SIGNED32 &lt;= a_SIGNED16 * b_SIGNED16;
-    y_SIGNED32 &lt;= SHIFT_RIGHT(x_SIGNED32, 4);
-
-    c_SIGNED16 &lt;= y_SIGNED32(15 downto 0);
+    y_SIGNED32 &lt;= SHIFT_RIGHT(x_SIGNED32, 16);
+	z_SIGNED32 &lt;= y_SIGNED32 + TO_SIGNED(400, 32);
+	
+    pixel_SIGNED16 &lt;= y_SIGNED32(15 downto 0);
+	pixel_SLV &lt;= std_logic_vector(pixel_SIGNED16);
 
 end structure;
 </pre>
